@@ -16,7 +16,7 @@ export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [families, setFamilies] = useState<ProductFamily[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-  const [productParameters, setProductParameters] = useState<ProductParameter[]>([]);
+  const [productParameters, setProductParameters] = useState<ProductParameterWithValues[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
    const parameters: ProductParameterWithValues[] = [];
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
