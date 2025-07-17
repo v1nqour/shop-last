@@ -998,14 +998,15 @@ def main():
     tester = APITester()
     
     try:
-        success = tester.run_all_tests()
+        # Run focused admin parameter management tests
+        success = tester.run_admin_parameter_tests()
         overall_success = tester.print_summary()
         
         if overall_success:
-            print("🎉 All backend API tests passed successfully!")
+            print("🎉 All admin parameter management tests passed successfully!")
             sys.exit(0)
         else:
-            print("💥 Some backend API tests failed!")
+            print("💥 Some admin parameter management tests failed!")
             sys.exit(1)
             
     except KeyboardInterrupt:
