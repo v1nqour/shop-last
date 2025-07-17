@@ -702,19 +702,12 @@ export default function AdminPage() {
                       {/* Parameter Values */}
                       <div>
                         <h5 className="font-medium mb-2">Values:</h5>
-                      <div className="flex flex-wrap gap-2 mb-2">
-                            {parameters.map((parameter: ProductParameterWithValues) => (
-                              <div key={parameter.id}>
-                                <h5 className="font-medium mb-2">Values:</h5>
-                                <div className="flex flex-wrap gap-2 mb-2">
-                                  {parameter.values?.map(value => (
-                                    <span key={value.id} className="bg-gray-100 px-2 py-1 rounded text-sm">
-                                      {value.value_name}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          {parameter.values?.map(value => (
+                            <span key={value.id} className="bg-gray-100 px-2 py-1 rounded text-sm">
+                              {value.value_name}
+                            </span>
+                          ))}
                         </div>
                         
                         {/* Add Value Form */}
