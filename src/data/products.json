@@ -1,0 +1,114 @@
+[
+  {
+    "category": "newArrivals",
+    "title": "WSR550 76-81GHz Radar level transmitter",
+    "srcUrl": "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744722547/products/file_zimf8y.png",
+    "gallery": [
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744722547/products/file_zimf8y.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744722547/products/file_g5wlyg.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744722547/products/file_wbmjje.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744722547/products/file_theoy0.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744722547/products/file_xope6z.png"
+    ],
+    "price": 0,
+    "discount": {
+      "amount": 0,
+      "percentage": 0
+    },
+    "specifications": [
+      {
+        "label": " Product ",
+        "value": "Radar level meter"
+      },
+      {
+        "label": "Model",
+        "value": "WSR550"
+      },
+      {
+        "label": " Measure range",
+        "value": "0.08~30m,0.3~60m, others"
+      },
+      {
+        "label": " Beam angle",
+        "value": "0.08~30m,0.3~60m, others"
+      },
+      {
+        "label": " Beam angle",
+        "value": "3°/8°"
+      },
+      {
+        "label": " Installation",
+        "value": "Thread, Flange"
+      },
+      {
+        "label": " Medium Temperature",
+        "value": "(-40~80)℃/(-40~150)℃(high temperature customized）"
+      }
+    ],
+    "description": "WSR550 radar level transmitter supports four-wire and two-wire applications, the product has multiple models, the range can reach 60m. Equipped with a 76-81GHz frequency band, the WSR550 provides superior performance in challenging environments where other level measurement technologies may fail. Its high-frequency signal allows for better penetration through dust, vapor, and foam, ensuring accurate readings even in harsh conditions.",
+    "rating": 5,
+    "disablePrice": true,
+    "id": 1
+  },
+  {
+    "category": "topSelling",
+    "title": "SUP-RD902T 26GHz Radar level meter",
+    "srcUrl": "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_wakr1j.png",
+    "gallery": [
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_wakr1j.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_e7d67f.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_bfjqbh.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_k06a7v.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_d2yqoh.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_wslwfm.png",
+      "https://res.cloudinary.com/diyxe4o4g/image/upload/v1744725939/products/file_r5pbcf.png"
+    ],
+    "price": 1700,
+    "discount": {
+      "amount": 0,
+      "percentage": 3
+    },
+    "specifications": [
+      {
+        "label": " Product \t",
+        "value": "Radar level meter"
+      },
+      {
+        "label": "Model",
+        "value": "SUP-RD902T"
+      },
+      {
+        "label": " Measure range\t",
+        "value": "0-20 meters"
+      },
+      {
+        "label": "Application",
+        "value": "Liquid"
+      },
+      {
+        "label": " Process Connection\t",
+        "value": "Thread, Flange"
+      },
+      {
+        "label": " Medium Temperature\t",
+        "value": "-40℃~130℃(Standard type), -40℃~230℃(High temp type)"
+      },
+      {
+        "label": " Process Pressure   \t",
+        "value": "-0.1~2.0MPa"
+      },
+      {
+        "label": "Accuracy",
+        "value": "±10mm "
+      },
+      {
+        "label": " Protection Grade\t",
+        "value": "IP67"
+      }
+    ],
+    "description": "SUP-RD902T Non-contact radar with simple commissioning, trouble-free operation saves time and money. PTFE sensor material, for usage in a wide range of applications - be it in simple storage tanks, in corrosive or aggressive media or high accuracy tank gauging applications.",
+    "rating": 4.7,
+    "disablePrice": false,
+    "id": 2
+  }
+]
