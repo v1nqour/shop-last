@@ -533,6 +533,167 @@ class APITester:
         
         return {'required': required_param_id, 'optional': optional_param_id}
 
+    def test_admin_parameter_management_for_product_19(self):
+        """Test admin page parameter management functionality for product ID 19"""
+        print("\n=== Testing Admin Parameter Management for Product 19 ===")
+        
+        product_id = "19"
+        
+        # 1. Test GET /api/products/19/parameters - should return existing parameters
+        print(f"\n1. Testing GET /api/products/{product_id}/parameters")
+        success, data, status = self.make_request('GET', f'/products/{product_id}/parameters')
+        self.log_test(f"GET /api/products/{product_id}/parameters", success, 
+                     f"Fetched parameters for product {product_id} (status: {status})", data)
+        
+        if success and isinstance(data, list):
+            print(f"   Found {len(data)} existing parameters")
+            for param in data:
+                if isinstance(param, dict):
+                    print(f"   - {param.get('parameter_name', 'Unknown')} ({param.get('parameter_type', 'Unknown')})")
+                    if param.get('values') and len(param['values']) > 0:
+                        print(f"     Values: {len(param['values'])} items")
+        
+        # 2. Test POST - Create new parameters with different types
+        print(f"\n2. Testing POST /api/products/{product_id}/parameters - Creating different parameter types")
+        
+        parameter_types_to_test = [
+            {
+                "parameter_name": "Motor Power Rating",
+                "parameter_type": "dropdown",
+                "is_required": True,
+                "display_order": 100
+            },
+            {
+                "parameter_name": "Safety Features",
+                "parameter_type": "checkbox", 
+                "is_required": False,
+                "display_order": 101
+            },
+            {
+                "parameter_name": "Operating Mode",
+                "parameter_type": "radio",
+                "is_required": True,
+                "display_order": 102
+            },
+            {
+                "parameter_name": "Custom Specifications",
+                "parameter_type": "text",
+                "is_required": False,
+                "display_order": 103
+            },
+            {
+                "parameter_name": "Flow Rate (L/min)",
+                "parameter_type": "number",
+                "is_required": True,
+                "display_order": 104
+            },
+            {
+                "parameter_name": "Additional Notes",
+                "parameter_type": "textarea",
+                "is_required": False,
+                "display_order": 105
+            },
+            {
+                "parameter_name": "Compatible Accessories",
+                "parameter_type": "multiselect",
+                "is_required": False,
+                "display_order": 106
+            }
+        ]
+        
+        created_parameters = []
+        for param_config in parameter_types_to_test:
+            success, data, status = self.make_request('POST', f'/products/{product_id}/parameters', param_config)
+            self.log_test(f"POST parameter type '{param_config['parameter_type']}'", success, 
+                         f"Created {param_config['parameter_type']} parameter (status: {status})", data)
+            
+            if success and isinstance(data, dict) and 'id' in data:
+                created_parameters.append({
+                    'id': data['id'],
+                    'type': param_config['parameter_type'],
+                    'name': param_config['parameter_name']
+                })
+                self.created_resources['product_parameters'].append(data['id'])
+        
+        # 3. Test parameter values management for dropdown parameter
+        print(f"\n3. Testing Parameter Values Management")
+        dropdown_param = next((p for p in created_parameters if p['type'] == 'dropdown'), None)
+        
+        if dropdown_param:
+            param_id = dropdown_param['id']
+            print(f"   Testing values for parameter: {dropdown_param['name']} (ID: {param_id})")
+            
+            # Test POST parameter values
+            test_values = [
+                {"value_name": "Low Power (1-5 HP)", "display_order": 1},
+                {"value_name": "Medium Power (5-15 HP)", "display_order": 2},
+                {"value_name": "High Power (15-50 HP)", "display_order": 3},
+                {"value_name": "Industrial Power (50+ HP)", "display_order": 4}
+            ]
+            
+            created_values = []
+            for value_data in test_values:
+                success, data, status = self.make_request('POST', f'/products/{product_id}/parameters/{param_id}/values', value_data)
+                self.log_test(f"POST parameter value '{value_data['value_name']}'", success, 
+                             f"Created parameter value (status: {status})", data)
+                
+                if success and isinstance(data, dict) and 'id' in data:
+                    created_values.append(data['id'])
+                    self.created_resources['product_parameter_values'].append(data['id'])
+            
+            # Test GET parameter values
+            success, data, status = self.make_request('GET', f'/products/{product_id}/parameters/{param_id}/values')
+            self.log_test(f"GET parameter values", success, 
+                         f"Fetched parameter values (status: {status})", data)
+            
+            if success and isinstance(data, list):
+                print(f"   Retrieved {len(data)} parameter values")
+                for value in data:
+                    if isinstance(value, dict):
+                        print(f"   - {value.get('value_name', 'Unknown')} (Order: {value.get('display_order', 'N/A')})")
+        
+        # 4. Test PUT - Update parameter
+        print(f"\n4. Testing PUT /api/products/{product_id}/parameters - Update parameter")
+        if created_parameters:
+            param_to_update = created_parameters[0]
+            updated_data = {
+                "id": param_to_update['id'],
+                "parameter_name": f"Updated {param_to_update['name']}",
+                "parameter_type": param_to_update['type'],
+                "is_required": True,
+                "display_order": 200,
+                "depends_on_parameter": None,
+                "depends_on_value": None
+            }
+            
+            success, data, status = self.make_request('PUT', f'/products/{product_id}/parameters', updated_data)
+            self.log_test(f"PUT parameter update", success, 
+                         f"Updated parameter (status: {status})", data)
+        
+        # 5. Test data integrity - verify parameters are associated with product
+        print(f"\n5. Testing Data Integrity")
+        success, data, status = self.make_request('GET', f'/products/{product_id}/parameters')
+        if success and isinstance(data, list):
+            param_count = len(data)
+            expected_count = len(created_parameters)
+            self.log_test(f"Data integrity check", param_count >= expected_count, 
+                         f"Verified {param_count} parameters associated with product {product_id}")
+            
+            # Check parameter structure
+            for param in data:
+                if isinstance(param, dict):
+                    required_fields = ['id', 'parameter_name', 'parameter_type', 'is_required', 'display_order']
+                    has_all_fields = all(field in param for field in required_fields)
+                    self.log_test(f"Parameter structure check", has_all_fields, 
+                                 f"Parameter has all required fields: {param.get('parameter_name', 'Unknown')}")
+                    
+                    # Check if values array exists
+                    has_values_array = 'values' in param
+                    self.log_test(f"Parameter values array", has_values_array, 
+                                 f"Parameter has values array: {param.get('parameter_name', 'Unknown')}")
+        
+        return created_parameters
+
     def get_test_product_id(self):
         """Get a product ID for testing - try to get from existing products"""
         print("\n=== Getting Test Product ID ===")
