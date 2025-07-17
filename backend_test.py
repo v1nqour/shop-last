@@ -727,10 +727,94 @@ class APITester:
             self.log_test(f"DELETE product parameter value (ID: {value_id})", success, 
                          f"Deleted parameter value (status: {status})", data)
         
+    def test_cascade_operations(self, product_id, created_parameters):
+        """Test cascade operations - deleting parameter should remove values"""
+        print(f"\n=== Testing Cascade Operations for Product {product_id} ===")
+        
+        if not created_parameters:
+            self.log_test("Cascade Operations Test", False, "No parameters available for cascade testing")
+            return False
+        
+        # Find a parameter with values to test cascade delete
+        dropdown_param = next((p for p in created_parameters if p['type'] == 'dropdown'), None)
+        
+        if dropdown_param:
+            param_id = dropdown_param['id']
+            
+            # First verify parameter has values
+            success, values_data, status = self.make_request('GET', f'/products/{product_id}/parameters/{param_id}/values')
+            if success and isinstance(values_data, list) and len(values_data) > 0:
+                value_count_before = len(values_data)
+                print(f"   Parameter has {value_count_before} values before deletion")
+                
+                # Delete the parameter
+                success, data, status = self.make_request('DELETE', f'/products/{product_id}/parameters', 
+                                                         params={'id': param_id})
+                self.log_test(f"DELETE parameter (cascade test)", success, 
+                             f"Deleted parameter with cascade (status: {status})", data)
+                
+                if success:
+                    # Verify values were also deleted (should return empty or 404)
+                    success, values_data, status = self.make_request('GET', f'/products/{product_id}/parameters/{param_id}/values')
+                    values_deleted = not success or (isinstance(values_data, list) and len(values_data) == 0)
+                    self.log_test(f"Cascade delete verification", values_deleted, 
+                                 f"Parameter values were properly deleted with parameter")
+                    
+                    # Remove from tracking since it's deleted
+                    if param_id in self.created_resources['product_parameters']:
+                        self.created_resources['product_parameters'].remove(param_id)
+                    
+                    return True
+        
+        return False
+
+    def test_delete_operations_product_19(self, product_id):
+        """Test DELETE operations for product 19 parameters"""
+        print(f"\n=== Testing DELETE Operations for Product {product_id} ===")
+        
+        # Delete parameter values first
+        for value_id in self.created_resources['product_parameter_values']:
+            success, data, status = self.make_request('DELETE', f'/products/{product_id}/parameters/dummy/values', 
+                                                     params={'id': value_id})
+            self.log_test(f"DELETE product parameter value (ID: {value_id})", success, 
+                         f"Deleted parameter value (status: {status})", data)
+        
         # Delete parameters
         for param_id in self.created_resources['product_parameters']:
             success, data, status = self.make_request('DELETE', f'/products/{product_id}/parameters', 
                                                      params={'id': param_id})
+            self.log_test(f"DELETE product parameter (ID: {param_id})", success, 
+                         f"Deleted parameter (status: {status})", data)
+
+    def run_admin_parameter_tests(self):
+        """Run focused tests for admin parameter management functionality"""
+        print(f"🚀 Starting Admin Parameter Management Tests")
+        print(f"📍 Testing against: {API_BASE}")
+        print("=" * 80)
+        
+        try:
+            # Test basic connectivity
+            success, data, status = self.make_request('GET', '/families')
+            if not success:
+                self.log_test("API Connectivity", False, 
+                             f"Cannot connect to API at {API_BASE}")
+                return False
+            
+            # Run the main admin parameter management test for product 19
+            created_parameters = self.test_admin_parameter_management_for_product_19()
+            
+            if created_parameters:
+                # Test cascade operations
+                self.test_cascade_operations("19", created_parameters)
+                
+                # Clean up remaining resources
+                self.test_delete_operations_product_19("19")
+            
+            return True
+            
+        except Exception as e:
+            self.log_test("Test Execution", False, f"Unexpected error: {str(e)}")
+            return False
     def test_delete_operations(self):
         """Test DELETE operations in correct order"""
         print("\n=== Testing DELETE Operations ===")
