@@ -218,13 +218,15 @@ export default function AdminPage() {
     if (!selectedProductId) return;
     
     try {
-      const response = await fetch(`/api/products/${selectedProductId}/parameters?parameterId=${parameterId}`, {
+      const response = await fetch(`/api/products/${selectedProductId}/parameters?id=${parameterId}`, {
         method: 'DELETE',
       });
       
       if (response.ok) {
         await fetchProductParameters(selectedProductId);
         setShowDeleteParameterConfirm(null);
+      } else {
+        console.error('Failed to delete parameter:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error deleting parameter:', error);
