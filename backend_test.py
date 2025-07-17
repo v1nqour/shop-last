@@ -11,8 +11,8 @@ import sys
 import os
 from typing import Dict, Any, List, Optional
 
-# Use localhost for testing Next.js API
-BASE_URL = "http://localhost:3000"
+# Use production URL for testing Next.js API
+BASE_URL = "https://shop.approvisionneur.com"
 API_BASE = f"{BASE_URL}/api"
 
 class APITester:
