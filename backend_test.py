@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Cart Functionality with Email Generation
-Tests the cart functionality with parameter configuration tables in emails
+Backend API Testing for Product Families Navigation System
+Tests the families navigation system specifically focusing on:
+1. /api/families endpoint
+2. /api/products/by-family endpoint
+3. Database connectivity
+4. Family detail retrieval functionality
 """
 
 import requests
