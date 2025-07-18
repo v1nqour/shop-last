@@ -1223,15 +1223,15 @@ def main():
     tester = APITester()
     
     try:
-        # Run focused admin parameter management tests
-        success = tester.run_admin_parameter_tests()
+        # Run focused cart email generation tests
+        success = tester.run_cart_email_tests()
         overall_success = tester.print_summary()
         
         if overall_success:
-            print("🎉 All admin parameter management tests passed successfully!")
+            print("🎉 All cart email generation tests passed successfully!")
             sys.exit(0)
         else:
-            print("💥 Some admin parameter management tests failed!")
+            print("💥 Some cart email generation tests failed!")
             sys.exit(1)
             
     except KeyboardInterrupt:
