@@ -204,7 +204,7 @@ export default function CartPage() {
               };
             }
             return null;
-          }).filter(Boolean);
+          }).filter((param): param is { parameterName: string; selectedValues: string[] } => param !== null);
           
           if (paramInfo.length === 0) return '';
           
