@@ -277,7 +277,11 @@ export default function CartPage() {
                     item.name && typeof item.name === "string"
                       ? item.name.replace(/[<>"'&]/g, "")
                       : "Product";
-                  const parameterDisplay = getParameterDisplay(item) || 'Standard Configuration';
+                  const parameterDisplay = getParameterDisplay(item);
+                  const parametersHtml = parameterDisplay ? 
+                    parameterDisplay.split('<br>').map(param => `<div style="margin-bottom: 2px;">${param}</div>`).join('') : 
+                    '<div style="color: #666; font-style: italic;">Standard Configuration</div>';
+                    
                   return `
                     <tr style="border-bottom: 1px solid #eee;">
                       ${
@@ -294,7 +298,7 @@ export default function CartPage() {
                           : ""
                       }
                       <td style="padding: 12px; color: #555;">${altText}</td>
-                      <td style="padding: 12px; color: #555; font-size: 12px;">${parameterDisplay}</td>
+                      <td style="padding: 12px; color: #555; font-size: 12px;">${parametersHtml}</td>
                       <td style="padding: 12px; color: #555;">${item.quantity}</td>
                       <td style="padding: 12px; color: #555;">Contact for Price</td>
                     </tr>
