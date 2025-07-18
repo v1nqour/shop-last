@@ -54,15 +54,20 @@ export default function CartPage() {
               };
             });
             
-            // Fetch parameter details for each parameter
-            for (const param of paramInfo) {
-              const response = await fetch(`/api/parameters/${param.parameterId}`);
-              if (response.ok) {
-                const parameterData = await response.json();
-                paramData[`${item.id}_${param.parameterId}`] = {
-                  ...parameterData,
-                  selectedValues: param.valueIds
-                };
+            // Fetch all parameters for this product
+            const response = await fetch(`/api/products/${item.id}/parameters`);
+            if (response.ok) {
+              const allParameters = await response.json();
+              
+              // Map the parameter data for each selected parameter
+              for (const param of paramInfo) {
+                const matchingParameter = allParameters.find((p: any) => p.id.toString() === param.parameterId);
+                if (matchingParameter) {
+                  paramData[`${item.id}_${param.parameterId}`] = {
+                    ...matchingParameter,
+                    selectedValues: param.valueIds
+                  };
+                }
               }
             }
           } catch (error) {
