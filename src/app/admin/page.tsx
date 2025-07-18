@@ -531,6 +531,32 @@ export default function AdminPage() {
                   </option>
                 ))}
               </select>
+              
+              {/* Product Preview */}
+              {selectedProductId && (
+                <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                  {(() => {
+                    const selectedProduct = products.find(p => p.id === selectedProductId);
+                    if (!selectedProduct) return null;
+                    
+                    return (
+                      <div className="flex items-center space-x-3">
+                        <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
+                          <img
+                            src={selectedProduct.srcUrl}
+                            alt={selectedProduct.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-800">{selectedProduct.title}</h4>
+                          <p className="text-sm text-gray-600">{selectedProduct.description}</p>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
 
             {selectedProductId && (
