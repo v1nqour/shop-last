@@ -14,8 +14,8 @@ import sys
 import os
 from typing import Dict, Any, List, Optional
 
-# Use the production URL from .env.local
-BASE_URL = "https://shop.approvisionneur.com"
+# Use the local development server
+BASE_URL = "http://localhost:3000"
 API_BASE = f"{BASE_URL}/api"
 
 class FamiliesNavigationTester:
