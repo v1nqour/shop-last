@@ -23,8 +23,10 @@ import {
 } from "@/components/ui/pagination";
 import { useEffect, useState } from "react";
 import { Product } from "@/types/product.types";
+import { useTranslations } from "@/lib/translations";
 
 export default function ShopPage() {
+  const { t } = useTranslations();
   const [products, setProducts] = useState<Product[]>([]);
   const [originalProducts, setOriginalProducts] = useState<Product[]>([]); // Store original order
   const [loading, setLoading] = useState(true);
@@ -75,7 +77,7 @@ export default function ShopPage() {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   if (loading) {
-    return <div className="text-center py-10">Loading products...</div>;
+    return <div className="text-center py-10">{t('shop.loadingProducts')}</div>;
   }
 
   return (
@@ -88,17 +90,17 @@ export default function ShopPage() {
             <div className="flex flex-col lg:flex-row lg:justify-between">
               <div className="flex items-center justify-between">
                 <h1 className="font-bold text-2xl md:text-[32px]">
-                  All Products
+                  {t('shop.allProducts')}
                 </h1>
               </div>
               <div className="flex flex-col sm:items-center sm:flex-row">
                 <span className="text-sm md:text-base text-black/60 mr-3">
-                  Showing {indexOfFirstProduct + 1}-
-                  {Math.min(indexOfLastProduct, products.length)} of{" "}
-                  {products.length} products
+                  {t('shop.showing')} {indexOfFirstProduct + 1}-
+                  {Math.min(indexOfLastProduct, products.length)} {t('shop.of')}{" "}
+                  {products.length} {t('shop.products')}
                 </span>
                 <div className="flex items-center">
-                  Sort by:{" "}
+                  {t('shop.sortBy')}{" "}
                   <Select
                     value={sortOrder}
                     onValueChange={(value: "none" | "low-price" | "high-price") =>
@@ -106,12 +108,12 @@ export default function ShopPage() {
                     }
                   >
                     <SelectTrigger className="font-medium text-sm px-1.5 sm:text-base w-fit text-black bg-transparent shadow-none border-none">
-                      <SelectValue placeholder="None" />
+                      <SelectValue placeholder={t('shop.none')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      <SelectItem value="low-price">Low Price</SelectItem>
-                      <SelectItem value="high-price">High Price</SelectItem>
+                      <SelectItem value="none">{t('shop.none')}</SelectItem>
+                      <SelectItem value="low-price">{t('shop.lowPrice')}</SelectItem>
+                      <SelectItem value="high-price">{t('shop.highPrice')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -125,7 +127,7 @@ export default function ShopPage() {
                   <ProductCard key={product.id} data={product} />
                 ))
               ) : (
-                <div className="text-center py-10">No products available</div>
+                <div className="text-center py-10">{t('shop.noProducts')}</div>
               )}
             </div>
 
@@ -143,7 +145,7 @@ export default function ShopPage() {
                   if (currentPage > 1) paginate(currentPage - 1);
                 }}
               >
-                Previous
+                {t('shop.previous')}
               </PaginationPrevious>
               <PaginationContent>
                 {Array.from({ length: Math.min(5, totalPages) }).map(
@@ -207,7 +209,7 @@ export default function ShopPage() {
                   if (currentPage < totalPages) paginate(currentPage + 1);
                 }}
               >
-                Next
+                {t('shop.next')}
               </PaginationNext>
             </Pagination>
           </div>

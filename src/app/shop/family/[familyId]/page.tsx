@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Product, ProductFamily } from '@/types/product.types';
 import { neon } from '@neondatabase/serverless';
+import { t } from '@/lib/translations';
 
 interface FamilyProductsPageProps {
   params: {
@@ -121,10 +122,10 @@ function ProductCard({ product }: { product: Product }) {
           
           <div className="text-right">
             {product.disablePrice ? (
-              <span className="text-sm text-gray-600">Contact for pricing</span>
+              <span className="text-sm text-gray-600">{t('product.contactForPricing')}</span>
             ) : (
               <span className="text-lg font-semibold text-gray-900">
-                Starting from MAD {product.price}
+                {t('product.startingFrom')} {t('general.currency')} {product.price}
               </span>
             )}
           </div>
@@ -134,7 +135,7 @@ function ProductCard({ product }: { product: Product }) {
           href={`/shop/product/${product.id}/${product.title.split(" ").join("-")}`}
           className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center block"
         >
-          View Details
+          {t('product.viewDetails')}
         </Link>
       </div>
     </div>
@@ -165,9 +166,9 @@ export default async function FamilyProductsPage({
       {/* Header */}
       <div className="mb-8">
         <nav className="flex items-center text-sm text-gray-600 mb-4">
-          <Link href="/" className="hover:text-blue-600">Home</Link>
+          <Link href="/" className="hover:text-blue-600">{t('navigation.home')}</Link>
           <span className="mx-2">/</span>
-          <Link href="/shop" className="hover:text-blue-600">Shop</Link>
+          <Link href="/shop" className="hover:text-blue-600">{t('navigation.shop')}</Link>
           <span className="mx-2">/</span>
           <span className="text-gray-900">{familyDetails.name}</span>
         </nav>
@@ -186,7 +187,7 @@ export default async function FamilyProductsPage({
           
           <div className="text-right">
             <p className="text-sm text-gray-600">
-              {products.length} product{products.length !== 1 ? 's' : ''} found
+              {products.length} {t('shop.product')}{products.length !== 1 ? 's' : ''} trouvé{products.length !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
@@ -208,16 +209,16 @@ export default async function FamilyProductsPage({
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              No products found
+              Aucun produit trouvé
             </h3>
             <p className="text-gray-600 mb-4">
-              There are currently no products in the {familyDetails.name} family.
+              Il n'y a actuellement aucun produit dans la famille {familyDetails.name}.
             </p>
             <Link
               href="/shop"
               className="inline-block bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200"
             >
-              Browse All Products
+              {t('shop.allProducts')}
             </Link>
           </div>
         </div>

@@ -6,6 +6,7 @@ import Header from "@/components/homepage/Header";
 import Reviews from "@/components/homepage/Reviews";
 import { reviewsData } from "../data/reviews";
 import { getProductsByCategory } from "@/lib/productUtils";
+import { t } from "@/lib/translations";
 
 export default async function Home() {
   let newArrivalsData = [];
@@ -21,7 +22,7 @@ export default async function Home() {
         <Header />
         <Brands />
         <main className="my-[50px] sm:my-[72px]">
-          <div>Error loading products. Please try again later.</div>
+          <div className="text-center py-8 text-gray-600">{t('homepage.errorLoadingProducts')}</div>
         </main>
       </div>
     );
@@ -33,7 +34,7 @@ export default async function Home() {
       <Brands />
       <main className="my-[50px] sm:my-[72px]">
         <ProductListSec
-          title="NEW ARRIVALS"
+          title={t('homepage.newArrivals')}
           data={newArrivalsData}
           viewAllLink="/shop#new-arrivals"
         />
@@ -42,7 +43,7 @@ export default async function Home() {
         </div>
         <div className="mb-[50px] sm:mb-20">
           <ProductListSec
-            title="TOP SELLING"
+            title={t('homepage.topSelling')}
             data={topSellingData}
             viewAllLink="/shop#top-selling"
           />
