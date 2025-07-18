@@ -990,7 +990,28 @@ class APITester:
             self.log_test(f"DELETE product parameter (ID: {param_id})", success, 
                          f"Deleted parameter (status: {status})", data)
 
-    def run_admin_parameter_tests(self):
+    def run_cart_email_tests(self):
+        """Run focused tests for cart functionality with email generation"""
+        print(f"🚀 Starting Cart Email Generation Tests")
+        print(f"📍 Testing against: {API_BASE}")
+        print("=" * 80)
+        
+        try:
+            # Test basic connectivity
+            success, data, status = self.make_request('GET', '/products/19/parameters')
+            if not success and status != 404:
+                self.log_test("API Connectivity", False, 
+                             f"Cannot connect to API at {API_BASE}")
+                return False
+            
+            # Run the main cart email generation workflow test
+            workflow_success = self.test_cart_email_generation_workflow()
+            
+            return workflow_success
+            
+        except Exception as e:
+            self.log_test("Test Execution", False, f"Unexpected error: {str(e)}")
+            return False
         """Run focused tests for admin parameter management functionality"""
         print(f"🚀 Starting Admin Parameter Management Tests")
         print(f"📍 Testing against: {API_BASE}")
