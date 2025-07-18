@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { PiTrashFill } from "react-icons/pi";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,11 +21,57 @@ type ProductCardProps = {
 const ProductCard = ({ data }: ProductCardProps) => {
   const discountPercentage = 0; // No discount anymore
   const discountAmount = 0;
+  const [parametersData, setParametersData] = useState<any[]>([]);
   
   const dispatch = useAppDispatch();
 
-  
-  
+  // Load parameter data for this cart item
+  useEffect(() => {
+    const loadParameterData = async () => {
+      const paramAttribute = data.attributes.find(attr => attr.startsWith('param_'));
+      if (paramAttribute) {
+        try {
+          const paramInfo = paramAttribute.split('|').map(param => {
+            const [paramId, values] = param.replace('param_', '').split(':');
+            return {
+              parameterId: paramId,
+              valueIds: values.split(',')
+            };
+          });
+          
+          const parameters = [];
+          for (const param of paramInfo) {
+            try {
+              const response = await fetch(`/api/products/${data.id}/parameters`);
+              if (response.ok) {
+                const allParameters = await response.json();
+                const matchingParameter = allParameters.find((p: any) => p.id.toString() === param.parameterId);
+                
+                if (matchingParameter) {
+                  const selectedValues = matchingParameter.values.filter((v: any) => 
+                    param.valueIds.includes(v.id.toString())
+                  );
+                  
+                  parameters.push({
+                    name: matchingParameter.parameter_name,
+                    values: selectedValues.map((v: any) => v.value_name)
+                  });
+                }
+              }
+            } catch (error) {
+              console.error('Error fetching parameter data:', error);
+            }
+          }
+          
+          setParametersData(parameters);
+        } catch (error) {
+          console.error('Error parsing parameter data:', error);
+        }
+      }
+    };
+
+    loadParameterData();
+  }, [data.id, data.attributes]);
 
   return (
     <div className="flex items-start space-x-4">
@@ -67,7 +113,32 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <PiTrashFill className="text-xl md:text-2xl text-red-600" />
           </Button>
         </div>
-        <br />
+        
+        {/* Show selected parameters in table format */}
+        {parametersData.length > 0 && (
+          <div className="my-3 bg-gray-50 rounded-lg p-3">
+            <h4 className="font-medium text-gray-800 mb-2">Selected Configuration</h4>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-1 px-2 font-medium text-gray-600">Parameter</th>
+                    <th className="text-left py-1 px-2 font-medium text-gray-600">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {parametersData.map((param, index) => (
+                    <tr key={index} className="border-b border-gray-100">
+                      <td className="py-1 px-2 text-gray-700">{param.name}</td>
+                      <td className="py-1 px-2 text-gray-900">{param.values.join(', ')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        
         <div className="flex items-center flex-wrap justify-between">
           <div className="flex items-center space-x-[5px] xl:space-x-2.5">
             {data.disablePrice ? (
@@ -76,42 +147,9 @@ const ProductCard = ({ data }: ProductCardProps) => {
               </span>
             ) : (
               <>
-                {discountPercentage > 0 ? (
-                  <span className="font-bold text-black text-xl xl:text-2xl">
-                    {`MAD ${Math.round(
-                      data.price - (data.price * discountPercentage) / 100
-                    )}`}
-                  </span>
-                ) : discountAmount > 0 ? (
-                  <span className="font-bold text-black text-xl xl:text-2xl">
-                    {`MAD ${data.price - discountAmount}`}
-                  </span>
-                ) : (
-                  <span className="font-bold text-black text-xl xl:text-2xl">
-                    MAD {data.price}
-                  </span>
-                )}
-                {discountPercentage > 0 && (
-                  <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-                    MAD {data.price}
-                  </span>
-                )}
-                {discountAmount > 0 && (
-                  <span className="font-bold text-black/40 line-through text-xl xl:text-2xl">
-                    MAD {data.price}
-                  </span>
-                )}
-                {discountPercentage> 0 ? (
-                  <span className="font-medium text-[10px] xl:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-                    {`-${discountPercentage}%`}
-                  </span>
-                ) : (
-                  discountAmount > 0 && (
-                    <span className="font-medium text-[10px] xl:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-                      {`-MAD ${discountAmount}`}
-                    </span>
-                  )
-                )}
+                <span className="font-bold text-black text-xl xl:text-2xl">
+                  Starting from MAD {data.price}
+                </span>
               </>
             )}
           </div>
