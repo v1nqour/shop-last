@@ -477,26 +477,14 @@ export default function CartPage() {
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black/60">Subtotal</span>
                     <span className="md:text-xl font-bold">
-                      MAD {totalPrice.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="md:text-xl text-black/60">
-                      Discount (
-                      {Math.round(
-                        ((totalPrice - adjustedTotalPrice) / totalPrice) * 100
-                      )}
-                      %)
-                    </span>
-                    <span className="md:text-xl font-bold text-red-600">
-                      -MAD {Math.round(totalPrice - adjustedTotalPrice).toFixed(2)}
+                      Starting from MAD {totalPrice.toFixed(2)}
                     </span>
                   </div>
                   <hr className="border-t-black/10" />
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black">Total</span>
                     <span className="text-xl md:text-2xl font-bold">
-                      MAD {Math.round(adjustedTotalPrice).toFixed(2)}
+                      Starting from MAD {totalPrice.toFixed(2)}
                     </span>
                   </div>
                 </div>
