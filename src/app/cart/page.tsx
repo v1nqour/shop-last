@@ -177,6 +177,59 @@ export default function CartPage() {
         (item) => item.disablePrice
       ) || [];
 
+      // Generate detailed product configuration tables
+      const generateProductConfigurationTable = (item: any) => {
+        const paramAttribute = item.attributes.find((attr: string) => attr.startsWith('param_'));
+        if (!paramAttribute) return '';
+        
+        try {
+          const paramInfo = paramAttribute.split('|').map((param: string) => {
+            const [paramId, values] = param.replace('param_', '').split(':');
+            const paramData = parametersData[`${item.id}_${paramId}`];
+            
+            if (paramData && paramData.values) {
+              const selectedValues = values.split(',').map(valueId => {
+                const value = paramData.values.find((v: any) => v.id.toString() === valueId);
+                return value ? value.value_name : valueId;
+              });
+              
+              return {
+                parameterName: paramData.parameter_name,
+                selectedValues: selectedValues
+              };
+            }
+            return null;
+          }).filter(Boolean);
+          
+          if (paramInfo.length === 0) return '';
+          
+          return `
+            <div style="margin-top: 15px;">
+              <h5 style="color: #333; margin-bottom: 8px;">Selected Configuration for ${item.name}:</h5>
+              <table style="width: 100%; border-collapse: collapse; background-color: #f8f9fa; border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                <thead>
+                  <tr style="background-color: #e9ecef;">
+                    <th style="padding: 8px 12px; text-align: left; font-weight: 600; color: #495057; font-size: 13px;">Parameter</th>
+                    <th style="padding: 8px 12px; text-align: left; font-weight: 600; color: #495057; font-size: 13px;">Selected Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${paramInfo.map(param => `
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                      <td style="padding: 8px 12px; color: #6c757d; font-size: 12px;">${param.parameterName}</td>
+                      <td style="padding: 8px 12px; color: #212529; font-size: 12px; font-weight: 500;">${param.selectedValues.join(', ')}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `;
+        } catch (error) {
+          console.error('Error generating configuration table:', error);
+          return '';
+        }
+      };
+
       // Generate table for priced products
       const pricedProductTable = pricedItems.length > 0
         ? `
@@ -190,7 +243,6 @@ export default function CartPage() {
                     : ""
                 }
                 <th style="padding: 12px; text-align: left;">Product</th>
-                <th style="padding: 12px; text-align: left;">Configuration</th>
                 <th style="padding: 12px; text-align: left;">Quantity</th>
                 <th style="padding: 12px; text-align: left;">Price</th>
                 <th style="padding: 12px; text-align: left;">Total</th>
@@ -207,12 +259,8 @@ export default function CartPage() {
                     item.name && typeof item.name === "string"
                       ? item.name.replace(/[<>"'&]/g, "")
                       : "Product";
-                  const discount = 0; // No discount anymore
                   const finalPrice = item.price;
-                  const parameterDisplay = getParameterDisplay(item);
-                  const parametersHtml = parameterDisplay ? 
-                    parameterDisplay.split('<br>').map(param => `<div style="margin-bottom: 2px;">${param}</div>`).join('') : 
-                    '<div style="color: #666; font-style: italic;">Standard Configuration</div>';
+                  const configurationTable = generateProductConfigurationTable(item);
                   
                   return `
                     <tr style="border-bottom: 1px solid #eee;">
@@ -229,8 +277,10 @@ export default function CartPage() {
                       `
                           : ""
                       }
-                      <td style="padding: 12px; color: #555;">${altText}</td>
-                      <td style="padding: 12px; color: #555; font-size: 12px;">${parametersHtml}</td>
+                      <td style="padding: 12px; color: #555;">
+                        <div style="font-weight: 600; margin-bottom: 4px;">${altText}</div>
+                        ${configurationTable}
+                      </td>
                       <td style="padding: 12px; color: #555;">${item.quantity}</td>
                       <td style="padding: 12px; color: #555;">Starting from MAD ${finalPrice.toFixed(
                         2
@@ -261,7 +311,6 @@ export default function CartPage() {
                     : ""
                 }
                 <th style="padding: 12px; text-align: left;">Product</th>
-                <th style="padding: 12px; text-align: left;">Configuration</th>
                 <th style="padding: 12px; text-align: left;">Quantity</th>
                 <th style="padding: 12px; text-align: left;">Price</th>
               </tr>
@@ -277,11 +326,8 @@ export default function CartPage() {
                     item.name && typeof item.name === "string"
                       ? item.name.replace(/[<>"'&]/g, "")
                       : "Product";
-                  const parameterDisplay = getParameterDisplay(item);
-                  const parametersHtml = parameterDisplay ? 
-                    parameterDisplay.split('<br>').map(param => `<div style="margin-bottom: 2px;">${param}</div>`).join('') : 
-                    '<div style="color: #666; font-style: italic;">Standard Configuration</div>';
-                    
+                  const configurationTable = generateProductConfigurationTable(item);
+                  
                   return `
                     <tr style="border-bottom: 1px solid #eee;">
                       ${
@@ -297,8 +343,10 @@ export default function CartPage() {
                       `
                           : ""
                       }
-                      <td style="padding: 12px; color: #555;">${altText}</td>
-                      <td style="padding: 12px; color: #555; font-size: 12px;">${parametersHtml}</td>
+                      <td style="padding: 12px; color: #555;">
+                        <div style="font-weight: 600; margin-bottom: 4px;">${altText}</div>
+                        ${configurationTable}
+                      </td>
                       <td style="padding: 12px; color: #555;">${item.quantity}</td>
                       <td style="padding: 12px; color: #555;">Contact for Price</td>
                     </tr>
@@ -312,17 +360,7 @@ export default function CartPage() {
 
       // Calculate totals for priced items only
       const pricedTotal = pricedItems.reduce(
-        (sum, item) => {
-          const discount = 0; // No discount anymore
-          return sum + (item.price - discount) * item.quantity;
-        },
-        0
-      );
-      const pricedDiscount = pricedItems.reduce(
-        (sum, item) => {
-          const discount = 0; // No discount anymore
-          return sum + discount * item.quantity;
-        },
+        (sum, item) => sum + item.price * item.quantity,
         0
       );
 
