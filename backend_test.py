@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Industrial Equipment Parameter Management System (Next.js)
-Tests all CRUD operations for families, parameters, parameter values, products by family,
-and the new product-based parameter system
+Backend API Testing for Cart Functionality with Email Generation
+Tests the cart functionality with parameter configuration tables in emails
 """
 
 import requests
@@ -11,8 +10,8 @@ import sys
 import os
 from typing import Dict, Any, List, Optional
 
-# Use localhost for testing Next.js API
-BASE_URL = "http://localhost:3000"
+# Use the production URL from .env.local
+BASE_URL = "https://shop.approvisionneur.com"
 API_BASE = f"{BASE_URL}/api"
 
 class APITester:
