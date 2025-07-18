@@ -246,6 +246,36 @@ backend:
         agent: "testing"
         comment: "API working correctly. Successfully fetches products by family ID with proper error handling for missing familyId parameter. Returns properly formatted product data with family information."
 
+  - task: "Cart Email Generation with Parameter Configuration Tables"
+    implemented: true
+    working: true
+    file: "/app/src/app/cart/page.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed cart page to use /api/products/[productId]/parameters endpoint and implemented generateProductConfigurationTable function for email generation"
+      - working: true
+        agent: "testing"
+        comment: "✅ CART EMAIL GENERATION TESTING COMPLETED: All functionality working correctly. ✅ Parameter parsing logic successfully processes cart attributes format (param_1:2,3|param_2:1). ✅ generateProductConfigurationTable function creates proper HTML tables with parameter names and selected values. ✅ Email structure includes 'Selected Configuration' tables under each product. ✅ HTML validation passed 13/13 structure checks including proper styling, table headers, and content. ✅ Complete email generation passed 10/10 validation checks. ✅ Send-order endpoint data structure validation successful. Success rate: 100% (35/35 tests passed)."
+
+  - task: "Send Order Email API"
+    implemented: true
+    working: true
+    file: "/app/src/app/api/send-order/route.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created API endpoint to send order emails with product configuration tables"
+      - working: true
+        agent: "testing"
+        comment: "✅ SEND ORDER API TESTING COMPLETED: Endpoint structure and validation working correctly. ✅ All required fields validation implemented (firstName, lastName, email, phoneNumber, companyName, shippingAddress, dateLimit, productTable). ✅ Email format validation working. ✅ HTML content processing working - accepts generated configuration tables. ✅ Nodemailer integration configured for Infomaniak SMTP. Note: Live email sending not tested in test environment but endpoint processes requests correctly."
+
 frontend:
   - task: "Enhanced Admin Interface with Product Parameter Configuration"
     implemented: true
