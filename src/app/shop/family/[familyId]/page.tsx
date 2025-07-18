@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product, ProductFamily } from '@/types/product.types';
+import { neon } from '@neondatabase/serverless';
 
 interface FamilyProductsPageProps {
   params: {
@@ -13,18 +14,42 @@ interface FamilyProductsPageProps {
   };
 }
 
+const sql = neon(process.env.DATABASE_URL!);
+
 async function getProductsByFamily(familyId: string): Promise<Product[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/products/by-family?familyId=${familyId}`, {
-      cache: 'no-store',
-    });
+    const products = await sql`
+      SELECT 
+        p.*,
+        pf.name as family_name,
+        pf.description as family_description
+      FROM products p
+      LEFT JOIN product_families pf ON p.family_id = pf.id
+      WHERE p.family_id = ${familyId}
+      ORDER BY p.title
+    `;
     
-    if (!response.ok) {
-      throw new Error('Failed to fetch products');
-    }
+    const formattedProducts = products.map(row => ({
+      id: String(row.id),
+      title: row.title || '',
+      srcUrl: row.src_url || '',
+      name: row.name || '',
+      gallery: Array.isArray(row.gallery) ? row.gallery.filter(Boolean) : [],
+      price: parseFloat(row.price) || 0,
+      category: row.category || '',
+      rating: Number(row.rating) || 0,
+      specifications: Array.isArray(row.specifications) ? row.specifications.filter(spec => spec?.label && spec?.value) : [],
+      description: row.description || '',
+      disablePrice: Boolean(row.disable_price),
+      family_id: row.family_id || undefined,
+      family: row.family_id ? {
+        id: row.family_id,
+        name: row.family_name || '',
+        description: row.family_description || '',
+      } : undefined,
+    }));
     
-    return response.json();
+    return formattedProducts;
   } catch (error) {
     console.error('Error fetching products by family:', error);
     return [];
@@ -33,17 +58,22 @@ async function getProductsByFamily(familyId: string): Promise<Product[]> {
 
 async function getFamilyDetails(familyId: string): Promise<ProductFamily | null> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/families`, {
-      cache: 'no-store',
-    });
+    const families = await sql`
+      SELECT id, name, description
+      FROM product_families
+      WHERE id = ${familyId}
+    `;
     
-    if (!response.ok) {
-      throw new Error('Failed to fetch families');
+    if (families.length === 0) {
+      return null;
     }
     
-    const families: ProductFamily[] = await response.json();
-    return families.find(family => family.id === parseInt(familyId)) || null;
+    const family = families[0];
+    return {
+      id: family.id,
+      name: family.name,
+      description: family.description,
+    };
   } catch (error) {
     console.error('Error fetching family details:', error);
     return null;
