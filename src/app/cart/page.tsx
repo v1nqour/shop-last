@@ -411,31 +411,15 @@ export default function CartPage() {
           ${
             pricedItems.length > 0
               ? `
-            <table style="width: 100%; border-collapse: collapse; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <table style="width: 100%; border-collapse: collapse; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px;">
               <tfoot>
-                <tr style="border-top: 2px solid #ddd;">
-                  <td colspan="${
-                    hasImages ? 5 : 4
-                  }" style="padding: 12px; font-weight: bold; color: #333;">Subtotal</td>
-                  <td style="padding: 12px; color: #555;">MAD ${pricedTotal.toFixed(
-                    2
-                  )}</td>
-                </tr>
-                <tr>
-                  <td colspan="${
-                    hasImages ? 5 : 4
-                  }" style="padding: 12px; font-weight: bold; color: #333;">Discount</td>
-                  <td style="padding: 12px; color: #ff0000;">-MAD ${pricedDiscount.toFixed(
-                    2
-                  )}</td>
-                </tr>
-                <tr>
+                <tr style="border-top: 2px solid #007bff; background-color: #f8f9fa;">
                   <td colspan="${
                     hasImages ? 4 : 3
-                  }" style="padding: 12px; font-weight: bold; color: #333;">Total</td>
-                  <td style="padding: 12px; color: #007bff; font-weight: bold;">MAD ${(
-                    pricedTotal - pricedDiscount
-                  ).toFixed(2)}</td>
+                  }" style="padding: 15px; font-weight: bold; color: #333; font-size: 16px;">Total</td>
+                  <td style="padding: 15px; color: #007bff; font-weight: bold; font-size: 16px;">Starting from MAD ${pricedTotal.toFixed(
+                    2
+                  )}</td>
                 </tr>
               </tfoot>
             </table>
@@ -446,6 +430,11 @@ export default function CartPage() {
             ${
               disabledPriceItems.length > 0
                 ? "We will contact you shortly to confirm pricing for items marked 'Contact for Price'. "
+                : ""
+            }
+            ${
+              pricedItems.length > 0
+                ? "Final pricing will be determined based on your selected specifications. "
                 : ""
             }
             Thank you for your inquiry!
