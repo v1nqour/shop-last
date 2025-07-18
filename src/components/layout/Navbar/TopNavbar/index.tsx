@@ -19,9 +19,11 @@ import { Product, ProductFamily } from "@/types/product.types";
 import { useRouter } from "next/navigation";
 import { debounce } from "lodash";
 import { FiChevronDown, FiPackage } from "react-icons/fi";
+import { useTranslations } from "@/lib/translations";
 
 const TopNavbar = () => {
   const router = useRouter();
+  const { t } = useTranslations();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -134,7 +136,7 @@ const TopNavbar = () => {
               className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
             >
               <FiPackage size={20} />
-              <span>Product Families</span>
+              <span>{t('navigation.productFamilies')}</span>
               <FiChevronDown 
                 size={16} 
                 className={`transition-transform duration-200 ${showFamiliesDropdown ? 'rotate-180' : ''}`} 
@@ -144,7 +146,7 @@ const TopNavbar = () => {
             {showFamiliesDropdown && (
               <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden">
                 <div className="p-4 bg-gray-50 border-b border-gray-100">
-                  <h3 className="font-semibold text-gray-800">Industrial Equipment Categories</h3>
+                  <h3 className="font-semibold text-gray-800">{t('navigation.industrialEquipmentCategories')}</h3>
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                   {families.map((family) => (
@@ -171,19 +173,19 @@ const TopNavbar = () => {
             href="/shop" 
             className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
           >
-            All Products
+            {t('navigation.allProducts')}
           </Link>
           <Link 
             href="/shop#new-arrivals" 
             className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
           >
-            New Arrivals
+            {t('navigation.newArrivals')}
           </Link>
           <Link 
             href="/shop#top-selling" 
             className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
           >
-            Top Selling
+            {t('navigation.topSelling')}
           </Link>
         </div>
 
@@ -197,7 +199,7 @@ const TopNavbar = () => {
                   src="/icons/search.svg"
                   height={20}
                   width={20}
-                  alt="search"
+                  alt={t('navigation.search')}
                   className="min-w-5 min-h-5"
                 />
               </InputGroup.Text>
@@ -207,7 +209,7 @@ const TopNavbar = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
-                placeholder="Search for industrial equipment..."
+                placeholder={t('navigation.searchPlaceholder')}
                 className="bg-transparent placeholder:text-black/40 w-full py-3 pr-4 border-none focus:outline-none"
               />
             </InputGroup>
@@ -256,7 +258,7 @@ const TopNavbar = () => {
               src="/icons/search-black.svg"
               height={100}
               width={100}
-              alt="search"
+              alt={t('navigation.search')}
               className="max-w-[22px] max-h-[22px]"
             />
           </Link>
@@ -267,7 +269,7 @@ const TopNavbar = () => {
               src="/icons/user.svg"
               height={100}
               width={100}
-              alt="user"
+              alt={t('navigation.admin')}
               className="max-w-[22px] max-h-[22px]"
             />
           </Link>
