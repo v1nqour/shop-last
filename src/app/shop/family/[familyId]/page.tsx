@@ -15,7 +15,8 @@ interface FamilyProductsPageProps {
 
 async function getProductsByFamily(familyId: string): Promise<Product[]> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/by-family?familyId=${familyId}`, {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/products/by-family?familyId=${familyId}`, {
       cache: 'no-store',
     });
     
