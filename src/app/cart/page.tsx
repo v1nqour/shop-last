@@ -219,7 +219,7 @@ export default function CartPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  ${paramInfo.map(param => `
+                  ${paramInfo.map((param: { parameterName: string; selectedValues: string[] }) => `
                     <tr style="border-bottom: 1px solid #dee2e6;">
                       <td style="padding: 8px 12px; color: #6c757d; font-size: 12px;">${param.parameterName}</td>
                       <td style="padding: 8px 12px; color: #212529; font-size: 12px; font-weight: 500;">${param.selectedValues.join(', ')}</td>
