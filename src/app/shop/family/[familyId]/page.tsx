@@ -33,7 +33,8 @@ async function getProductsByFamily(familyId: string): Promise<Product[]> {
 
 async function getFamilyDetails(familyId: string): Promise<ProductFamily | null> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/families`, {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/families`, {
       cache: 'no-store',
     });
     
