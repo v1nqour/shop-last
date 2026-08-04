@@ -1,57 +1,32 @@
-import bcrypt from "bcrypt";
-import NextAuth, { type NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+async authorize(credentials) {
+  const adminUsername = process.env.ADMIN_USERNAME;
+  const adminPasswordHash = process.env.ADMIN_PASSWORD;
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const adminUsername = process.env.ADMIN_USERNAME;
-        const adminPasswordHash = process.env.ADMIN_PASSWORD;
+  console.log("ADMIN_USERNAME:", adminUsername);
+  console.log("ADMIN_PASSWORD:", adminPasswordHash);
 
-        if (!credentials?.username || !credentials?.password) return null;
+  console.log("INPUT USERNAME:", credentials?.username);
+  console.log("INPUT PASSWORD:", credentials?.password);
 
-        const isUsernameValid = credentials.username === adminUsername;
-        const isPasswordValid = await bcrypt.compare(credentials.password, adminPasswordHash || "");
+  if (!credentials?.username || !credentials?.password) return null;
 
-        if (isUsernameValid && isPasswordValid) {
-          return {
-            id: "1",
-            name: adminUsername,
-            email: "admin@example.com",
-          };
-        }
+  const isUsernameValid = credentials.username === adminUsername;
 
-        return null;
-      },
-    }),
-  ],
-  pages: {
-    signIn: "/login",
-  },
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-      }
-      return session;
-    },
-  },
-};
+  const isPasswordValid = await bcrypt.compare(
+    credentials.password,
+    adminPasswordHash || ""
+  );
 
-export default NextAuth(authOptions);
+  console.log("Username valid:", isUsernameValid);
+  console.log("Password valid:", isPasswordValid);
+
+  if (isUsernameValid && isPasswordValid) {
+    return {
+      id: "1",
+      name: adminUsername,
+      email: "admin@example.com",
+    };
+  }
+
+  return null;
+}
