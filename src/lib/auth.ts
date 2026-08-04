@@ -1,3 +1,4 @@
+throw new Error("AUTH FILE LOADED");
 async authorize(credentials) {
   const adminUsername = process.env.ADMIN_USERNAME;
   const adminPasswordHash = process.env.ADMIN_PASSWORD;
