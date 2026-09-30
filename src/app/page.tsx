@@ -48,7 +48,7 @@ export default async function Home() {
             viewAllLink="/shop#top-selling"
           />
         </div>
-        <Reviews data={reviewsData} />
+        {/* <Reviews data={reviewsData} /> */}
       </main>
     </>
   );

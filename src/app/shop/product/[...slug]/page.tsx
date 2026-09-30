@@ -59,7 +59,7 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
         </div>
         {relatedProducts.length > 0 && (
           <div className="mb-[50px] sm:mb-20">
-            <ProductListSec title="You might also like" data={relatedProducts} />
+            <ProductListSec title="Related Products ⭐" data={relatedProducts} />
           </div>
         )}
       </main>

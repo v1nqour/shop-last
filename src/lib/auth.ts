@@ -1,33 +1,93 @@
-throw new Error("AUTH FILE LOADED");
-async authorize(credentials) {
-  const adminUsername = process.env.ADMIN_USERNAME;
-  const adminPasswordHash = process.env.ADMIN_PASSWORD;
+import bcrypt from "bcrypt";
+import NextAuth, { type NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-  console.log("ADMIN_USERNAME:", adminUsername);
-  console.log("ADMIN_PASSWORD:", adminPasswordHash);
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: {
+          label: "Username",
+          type: "text",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
+      },
 
-  console.log("INPUT USERNAME:", credentials?.username);
-  console.log("INPUT PASSWORD:", credentials?.password);
+      async authorize(credentials) {
+        console.log("========== LOGIN ATTEMPT ==========");
 
-  if (!credentials?.username || !credentials?.password) return null;
+        const adminUsername = process.env.ADMIN_USERNAME;
+        const adminPasswordHash = process.env.ADMIN_PASSWORD;
 
-  const isUsernameValid = credentials.username === adminUsername;
+        console.log("Received credentials:", credentials);
+        console.log("ENV ADMIN_USERNAME:", adminUsername);
+        console.log("ENV ADMIN_PASSWORD:", adminPasswordHash);
 
-  const isPasswordValid = await bcrypt.compare(
-    credentials.password,
-    adminPasswordHash || ""
-  );
+        if (!credentials?.username || !credentials?.password) {
+          console.log("❌ Missing username or password");
+          return null;
+        }
 
-  console.log("Username valid:", isUsernameValid);
-  console.log("Password valid:", isPasswordValid);
+        const isUsernameValid =
+          credentials.username === adminUsername;
 
-  if (isUsernameValid && isPasswordValid) {
-    return {
-      id: "1",
-      name: adminUsername,
-      email: "admin@example.com",
-    };
-  }
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          adminPasswordHash || ""
+        );
 
-  return null;
-}
+        console.log("Username entered:", credentials.username);
+        console.log("Password entered:", credentials.password);
+        console.log("Username valid:", isUsernameValid);
+        console.log("Password valid:", isPasswordValid);
+
+        if (isUsernameValid && isPasswordValid) {
+          console.log("✅ Login SUCCESS");
+
+          return {
+            id: "1",
+            name: adminUsername,
+            email: "admin@example.com",
+          };
+        }
+
+        console.log("❌ Login FAILED");
+        return null;
+      },
+    }),
+  ],
+
+  pages: {
+    signIn: "/login",
+  },
+
+  session: {
+    strategy: "jwt",
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        (session.user as any).id = token.id as string;
+      }
+
+      return session;
+    },
+  },
+};
+
+export default NextAuth(authOptions);
