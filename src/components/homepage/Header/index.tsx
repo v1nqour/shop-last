@@ -22,7 +22,7 @@ const Header = () => {
               "text-4xl lg:text-[64px] lg:leading-[64px] mb-5 lg:mb-8",
             ])}
           >
-           Supmea Automation Solutions Your Trusted Reseller for Industrial Instruments
+           Solutions d’automatisation Supmea — Votre revendeur de confiance pour les instruments industriels
           </motion.h2>
           <motion.p
             initial={{ y: "100px", opacity: 0 }}
