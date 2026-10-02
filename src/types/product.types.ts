@@ -12,9 +12,18 @@ export interface ProductParameter {
   id: number;
   product_id: string;
   parameter_name: string;
-  parameter_type: 'dropdown' | 'checkbox' | 'radio' | 'text' | 'number' | 'textarea' | 'multiselect';
+  parameter_type:
+    | 'dropdown'
+    | 'checkbox'
+    | 'radio'
+    | 'text'
+    | 'number'
+    | 'textarea'
+    | 'multiselect';
   is_required: boolean;
   display_order: number;
+  depends_on_parameter?: number | null;
+  depends_on_value?: string | null;
   created_at?: string;
 }
 

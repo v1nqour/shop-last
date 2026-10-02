@@ -62,10 +62,21 @@ const ProductParameterSelection: React.FC<ProductParameterSelectionProps> = ({
   };
 
   const handleSelectChange = (parameterId: number, value: string) => {
-    setSelectedValues(prev => ({
-      ...prev,
-      [parameterId]: [value]
-    }));
+    setSelectedValues(prev => {
+      const next = {
+        ...prev,
+        [parameterId]: value ? [value] : [],
+      };
+
+      // Clear parameters that depend on this parameter
+      parameters.forEach(parameter => {
+        if (parameter.depends_on_parameter === parameterId) {
+          delete next[parameter.id];
+        }
+      });
+
+      return next;
+    });
   };
 
   const handleCheckboxChange = (parameterId: number, value: string, checked: boolean) => {
@@ -84,6 +95,25 @@ const ProductParameterSelection: React.FC<ProductParameterSelectionProps> = ({
       }
     });
   };
+  const isParameterVisible = (parameter: ProductParameterWithValues) => {
+  // No dependency = always visible
+  if (!parameter.depends_on_parameter) {
+    return true;
+  }
+
+  const parentSelection =
+    selectedValues[parameter.depends_on_parameter] || [];
+
+  // Parent hasn't been selected yet
+  if (parentSelection.length === 0) {
+    return false;
+  }
+
+  // Show parameter only when selected parent value matches
+  return parentSelection.includes(
+    parameter.depends_on_value || ''
+  );
+};
 
   const renderParameterInput = (parameter: ProductParameterWithValues) => {
     const currentSelection = selectedValues[parameter.id] || [];
@@ -304,7 +334,9 @@ const ProductParameterSelection: React.FC<ProductParameterSelectionProps> = ({
       </p>
       
       <div className="space-y-6">
-        {parameters.map(parameter => (
+        {parameters
+        .filter(isParameterVisible)
+        .map(parameter => (
           <div key={parameter.id}>
             {renderParameterInput(parameter)}
           </div>
