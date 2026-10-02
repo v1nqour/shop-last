@@ -834,7 +834,7 @@ export default function AdminPage() {
                 >
                   <option value="newArrivals">New Arrivals</option>
                   <option value="topSelling">Top Selling</option>
-                  <option value="relatedProducts">Related Products</option>
+                  <option value="relatedProducts">Produits similaires</option>
                 </select>
               </div>
 
