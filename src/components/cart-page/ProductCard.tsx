@@ -148,7 +148,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             ) : (
               <>
                 <span className="font-bold text-black text-xl xl:text-2xl">
-                  Starting from MAD {data.price}
+                  À partir de MAD {data.price}
                 </span>
               </>
             )}

@@ -791,8 +791,8 @@ class APITester:
                   {config_table}
                 </td>
                 <td style="padding: 12px; color: #555;">{cart_item["quantity"]}</td>
-                <td style="padding: 12px; color: #555;">Starting from MAD {cart_item["price"]:.2f}</td>
-                <td style="padding: 12px; color: #555;">Starting from MAD {(cart_item["price"] * cart_item["quantity"]):.2f}</td>
+                <td style="padding: 12px; color: #555;">À partir de MAD {cart_item["price"]:.2f}</td>
+                <td style="padding: 12px; color: #555;">À partir de MAD {(cart_item["price"] * cart_item["quantity"]):.2f}</td>
               </tr>
             </tbody>
           </table>

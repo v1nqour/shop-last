@@ -287,10 +287,10 @@ export default function CartPage() {
                         ${configurationTable}
                       </td>
                       <td style="padding: 12px; color: #555;">${item.quantity}</td>
-                      <td style="padding: 12px; color: #555;">Starting from MAD ${finalPrice.toFixed(
+                      <td style="padding: 12px; color: #555;">À partir de MAD ${finalPrice.toFixed(
                         2
                       )}</td>
-                      <td style="padding: 12px; color: #555;">Starting from MAD ${(
+                      <td style="padding: 12px; color: #555;">À partir de MAD ${(
                         finalPrice * item.quantity
                       ).toFixed(2)}</td>
                     </tr>
@@ -422,7 +422,7 @@ export default function CartPage() {
                   <td colspan="${
                     hasImages ? 4 : 3
                   }" style="padding: 15px; font-weight: bold; color: #333; font-size: 16px;">Total</td>
-                  <td style="padding: 15px; color: #007bff; font-weight: bold; font-size: 16px;">Starting from MAD ${pricedTotal.toFixed(
+                  <td style="padding: 15px; color: #007bff; font-weight: bold; font-size: 16px;">À partir de MAD ${pricedTotal.toFixed(
                     2
                   )}</td>
                 </tr>
@@ -517,14 +517,14 @@ export default function CartPage() {
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black/60">Subtotal</span>
                     <span className="md:text-xl font-bold">
-                      Starting from MAD {totalPrice.toFixed(2)}
+                      À partir de MAD {totalPrice.toFixed(2)}
                     </span>
                   </div>
                   <hr className="border-t-black/10" />
                   <div className="flex items-center justify-between">
                     <span className="md:text-xl text-black">Total</span>
                     <span className="text-xl md:text-2xl font-bold">
-                      Starting from MAD {totalPrice.toFixed(2)}
+                      À partir de MAD {totalPrice.toFixed(2)}
                     </span>
                   </div>
                 </div>

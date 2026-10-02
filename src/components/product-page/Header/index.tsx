@@ -79,7 +79,7 @@ const Header = ({ data }: { data: Product }) => {
                   </span>
                 ) : (
                   <span className="font-bold text-black text-2xl sm:text-[32px]">
-                    Starting from MAD {data.price}
+                    À partir de MAD {data.price}
                   </span>
                 )}
                 {discountPercentage > 0 && (

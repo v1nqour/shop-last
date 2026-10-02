@@ -31,7 +31,7 @@ const Header = () => {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="text-black/60 text-sm lg:text-base mb-6 lg:mb-8 max-w-[545px]"
           >
-            Premium Flow Meters, Transmitters & Process Control Tools for Oil, Gas, Water, and Chemical Industries
+            Débitmètres Premium, Transmetteurs et Instruments de Contrôle des Procédés pour les Industries du Pétrole, du Gaz, de l’Eau et de la Chimie
           </motion.p>
           <motion.div
             initial={{ y: "100px", opacity: 0 }}
@@ -43,7 +43,7 @@ const Header = () => {
               href="/shop"
               className="w-full md:w-52 mb-5 md:mb-12 inline-block text-center bg-black hover:bg-black/80 transition-all text-white px-14 py-4 rounded-full hover:animate-pulse"
             >
-              Shop Now
+              Achetez maintenant
             </Link>
           </motion.div>
           <motion.div

@@ -18,7 +18,7 @@ export const translations = {
     
     // Homepage
     homepage: {
-      newArrivals: "NOUVEAUTÉS",
+      newArrivals: "NOUVEAUTéS",
       topSelling: "MEILLEURES VENTES",
       errorLoadingProducts: "Erreur lors du chargement des produits. Veuillez réessayer plus tard.",
       viewAll: "Voir tout"

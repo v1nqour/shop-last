@@ -992,7 +992,7 @@ export default function AdminPage() {
                           placeholder="Starting price"
                         />
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">Will be displayed as "Starting from MAD {newProduct.price || 0}"</p>
+                      <p className="text-sm text-gray-500 mt-1">Will be displayed as "À partir de MAD {newProduct.price || 0}"</p>
                     </div>
                   </div>
                 )}
@@ -1105,7 +1105,7 @@ export default function AdminPage() {
                     <p className="text-gray-600">Family: {product.family?.name || 'No family'}</p>
                     <p className="text-gray-600">Category: {product.category}</p>
                     <p className="text-gray-600">
-                      Price: {product.disablePrice ? 'Contact for pricing' : `Starting from MAD ${product.price}`}
+                      Price: {product.disablePrice ? 'Contact for pricing' : `À partir de MAD ${product.price}`}
                     </p>
                     <p className="text-gray-600">Rating: {product.rating}/5</p>
                   </div>

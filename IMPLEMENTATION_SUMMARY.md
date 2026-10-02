@@ -42,7 +42,7 @@
 - **Removed French field support**: All utility functions now work with English only
 
 ### 6. Frontend Updates
-- **Updated product display**: "Starting from" pricing format
+- **Updated product display**: "À partir de" pricing format
 - **Removed discount system**: All discount code removed
 - **Simplified language handling**: No translation support
 - **Admin interface**: Ready for family selection (requires database connection)
@@ -87,7 +87,7 @@ npm run dev
 - ✅ User-selectable parameter values
 
 ### Pricing System
-- ✅ Changed to "Starting from MAD X" format
+- ✅ Changed to "À partir de MAD X" format
 - ✅ Removed all discount functionality
 - ✅ Contact pricing option maintained
 
